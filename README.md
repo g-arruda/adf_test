@@ -67,8 +67,6 @@ print(result$control)
   - `max_diff`: Maximum number of differences to apply (default = 3).
 - **Returns**: A list with transformed data and a control table tracking the differencing process.
 
-## License
-This project is licensed under the MIT License.
 
 ## Contributions
 Feel free to open issues or submit pull requests for improvements!
