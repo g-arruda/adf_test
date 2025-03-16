@@ -185,12 +185,6 @@ remove_unit_root <- function(data, max_diff = 3) {
 
 
 
-
-
-
-
-
-
 #' Conduct Panel Unit Root Tests
 #'
 #' This function performs three panel unit root tests—Maddala and Wu, Choi, and Levin-Lin-Chu—on the provided panel data.
