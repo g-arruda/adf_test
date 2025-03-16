@@ -177,3 +177,95 @@ remove_unit_root <- function(data, max_diff = 3) {
   }
   return(list("data" = df_temp, "control" = df_control))
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#' Conduct Panel Unit Root Tests
+#'
+#' This function performs three panel unit root tests—Maddala and Wu, Choi, and Levin-Lin-Chu—on the provided panel data.
+#'
+#' @param data A data frame or matrix where rows represent time periods and columns represent individual units (e.g., countries, firms).
+#'
+#' @return A list containing the results of the Maddala and Wu test (`mw`), Choi test (`choi`), and Levin-Lin-Chu test (`llc`). Each element is an object of class `"htest"` with components:
+#'   \item{statistic}{The value of the test statistic.}
+#'   \item{parameter}{The degrees of freedom for the test statistic.}
+#'   \item{p.value}{The p-value for the test.}
+#'   \item{method}{A character string indicating the type of test performed.}
+#'   \item{data.name}{A character string giving the name of the data.}
+#' Additionally, the list includes a `summary` function to print the test results.
+#'
+#' @details
+#' **Maddala and Wu Test**: This is a Fisher-type test that combines p-values from individual unit root tests across cross-sections. It does not assume a common autoregressive parameter across panels, making it suitable for heterogeneous panels. [See plm package documentation](https://search.r-project.org/CRAN/refmans/plm/help/purtest.html)
+#'
+#' **Choi Test**: Another Fisher-type test similar to Maddala and Wu's, but with different combining methods for p-values. It also accommodates heterogeneity across panels. [See plm package documentation](https://search.r-project.org/CRAN/refmans/plm/help/purtest.html)
+#'
+#' **Levin-Lin-Chu Test**: Assumes a common autoregressive parameter across panels, implying homogeneity. It is more powerful when this assumption holds but may be restrictive for heterogeneous panels. [See plm package documentation](https://search.r-project.org/CRAN/refmans/plm/help/purtest.html)
+#'
+#' @examples
+#' \dontrun{
+#' # Assuming 'panel_data' is a data frame with time series data
+#' results <- panel_unit_root_tests(panel_data)
+#' results$summary()
+#' }
+#'
+#' @import plm
+#' @export
+panel_unit_root_tests <- function(data) {
+    # Prepare data in panel format
+    T <- nrow(data)
+    N <- ncol(data)
+  
+    panel_data <- data.frame(
+      id = rep(1:N, each = T),
+      time = rep(1:T, N),
+      y = as.vector(data)
+    )
+  
+    # Create pdata.frame object
+    panel_data <- plm::pdata.frame(panel_data, index = c("id", "time"))
+  
+    # Maddala and Wu test
+    mw_test <- plm::purtest(panel_data$y, test = "madwu", exo = "intercept")
+  
+    # Choi test
+    choi_test <- plm::purtest(panel_data$y, test = "Pm", exo = "intercept")
+  
+    # Levin-Lin-Chu test
+    llc_test <- plm::purtest(panel_data$y, test = "levinlin", exo = "intercept")
+  
+    # Organize results
+    results <- list(
+      mw = mw_test,
+      choi = choi_test,
+      llc = llc_test
+    )
+  
+    # Summary function
+    summary <- function() {
+      cat("\nPanel Unit Root Tests:\n")
+      cat("================================\n")
+  
+      cat("\n1. Maddala and Wu Test:\n")
+      print(mw_test)
+  
+      cat("\n2. Choi Test:\n")
+      print(choi_test)
+  
+      cat("\n3. Levin-Lin-Chu Test:\n")
+      print(llc_test)
+    }
+  
+    results$summary <- summary
+    return(results)
+}
