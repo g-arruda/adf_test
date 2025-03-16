@@ -19,26 +19,7 @@ These functions automate the process of checking for unit roots and transforming
 Ensure you have the required R packages installed before using the functions:
 
 ```r
-install.packages(c("urca", "dplyr", "purrr", "tidyr", "tibble", "plm"))# Unit Root Tests and Differencing in R
-
-## Overview
-This repository contains two R functions for handling unit root tests in time series data:
-
-1. **`adf_test`**: Performs the Augmented Dickey-Fuller (ADF) test to check for stationarity in time series. If non-stationary series are detected, the test is automatically applied to their first differences.
-2. **`remove_unit_root`**: Sequentially differences non-stationary variables until stationarity is achieved or a maximum number of differences is reached.
-
-### Why Use These Functions?
-These functions automate the process of checking for unit roots and transforming data to stationarity, saving time and effort when working with large datasets. They:
-- Apply the ADF test efficiently to multiple time series variables.
-- Automatically identify and handle non-stationary series.
-- Perform sequential differencing without manual intervention.
-- Provide clear outputs, making it easy to track transformations.
-
-## Installation
-Ensure you have the required R packages installed before using the functions:
-
-```r
-install.packages(c("urca", "dplyr", "purrr", "tidyr", "tibble"))
+install.packages(c("urca", "dplyr", "purrr", "tidyr", "tibble", "plm"))
 ```
 
 ## Usage
